@@ -193,6 +193,6 @@ button:active {
 }
 @media (max-width: 640px) {
   body,input,button {
-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+font-family: "Architects Daughter";
   }
 }
