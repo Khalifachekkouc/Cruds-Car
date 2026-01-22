@@ -15,6 +15,7 @@ body {
   font-weight: 600;
   font-style: normal;
 }
+
 .container {
   max-width: 1000px;
   margin: 0 auto;
@@ -126,8 +127,8 @@ button:active {
   align-items: flex-start;
 }
 .badge {
-  background: rgba(59, 130, 246, 0.1);
-  color: #10b981;
+  background: rgba(2, 248, 31, 0.1);
+  color: #10b937;
   padding: 0.25rem 0.625rem;
   border-radius: 9999px;
   font-size: 0.75rem;
@@ -188,5 +189,10 @@ button:active {
 @media (max-width: 640px) {
   .grid-2 {
     grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 640px) {
+  body,input,button {
+font-family: "Segoe UI", Helvetica, Arial, sans-serif;
   }
 }
