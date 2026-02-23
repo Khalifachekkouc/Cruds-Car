@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Car Management System</title>
     <link rel="stylesheet" href="Cruds.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet" />
 </head>
+
 <body>
     <div class="container">
         <header class="head">
@@ -16,8 +20,9 @@
 
         <section class="inputs-section">
             <div class="card form-card">
+                <div class="tape"></div>
                 <div class="grid-2">
-                    <input type="text" placeholder="Brand" id="brand"> 
+                    <input type="text" placeholder="Brand" id="brand">
                     <input type="text" placeholder="Model" id="model">
                 </div>
                 <div class="price-grid">
@@ -31,21 +36,31 @@
                     <input type="number" placeholder="Count" id="count">
                     <input type="text" placeholder="Fuel Type" id="type">
                 </div>
-                <button id="submit-btn" onclick="handleSubmit()">Create</button>
+                <button id="submit-btn" onclick="handleSubmit()">
+                   <svg  width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path>
+            <path d="M21 3v5h-5"></path>
+          </svg>
+                    Create</button>
             </div>
         </section>
 
         <section class="outputs-section">
             <div class="search-block card">
-                <input type="text" onkeyup="searchData(this.value)" placeholder="Search by Brand, Model, or Fuel Type..." id="search"> 
+                <div class="tape"></div>
+                <input type="text" onkeyup="searchData(this.value)"
+                    placeholder="Search by Brand, Model, or Fuel Type..." id="search">
             </div>
 
             <div id="deleteAllBtnContainer"></div>
 
             <div id="cards-container" class="cards-grid">
+                
             </div>
         </section>
     </div>
     <script src="Cruds.js"></script>
 </body>
+
 </html>
