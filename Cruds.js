@@ -11,6 +11,7 @@ let type = document.getElementById("type");
 let submitBtn = document.getElementById("submit-btn");
 let mood = "create";
 let tmp;
+let filteredData = []; 
 
 function getTotal() {
   if (price.value != "") {
@@ -44,14 +45,12 @@ function handleSubmit() {
         dataProduct.push({ ...newProduct, id: Date.now() + i });
       }
     } else {
-      dataProduct[tmp] = newProduct;
+      let index = dataProduct.findIndex(item => item.id === tmp);
+      if (index !== -1) {
+          dataProduct[index] = { ...newProduct, id: tmp };
+      }
       mood = "create";
-      submitBtn.innerHTML = `
-            <svg  width="20" height="20" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path>
-            <path d="M21 3v5h-5"></path>
-          </svg>Create`;
+      submitBtn.innerHTML = `Create`;
       count.style.display = "block";
     }
     clearData();
@@ -77,10 +76,11 @@ function clearData() {
 function showData(data = dataProduct) {
   let container = document.getElementById("cards-container");
   let cards = "";
-  data.forEach((item, i) => {
+  
+  data.forEach((item) => {
     cards += `
             <div class="car-card card animate-in">
-            <div class="tape"></div>
+                <div class="tape"></div>
                 <div class="card-header">
                     <h3>${item.brand}</h3>
                     <span class="badge">${item.type}</span>
@@ -94,8 +94,8 @@ function showData(data = dataProduct) {
                 <div class="card-footer">
                     <div class="total-price">$${item.total}</div>
                     <div class="actions">
-                        <button class="btn-icon" onclick="updateData(${i})">Edit</button>
-                        <button class="btn-icon btn-danger" onclick="deleteData(${i})">Delete</button>
+                        <button class="btn-icon" onclick="updateData(${item.id})">Edit</button>
+                        <button class="btn-icon btn-danger" onclick="deleteData(${item.id})">Delete</button>
                     </div>
                 </div>
             </div>
@@ -104,54 +104,65 @@ function showData(data = dataProduct) {
   container.innerHTML = cards;
 
   let delBtn = document.getElementById("deleteAllBtnContainer");
-  let countCard = data.length;
-
+  
   if (dataProduct.length > 0) {
-    delBtn.innerHTML = `<button class="btn-danger" onclick="deleteAll()">Delete All (${dataProduct.length})</button>`;
+    let displayCount = (document.getElementById("search").value != "") ? data.length : dataProduct.length;
+    delBtn.innerHTML = `<button class="btn-danger" onclick="deleteAll()">Delete All (${displayCount})</button>`;
   } else {
     delBtn.innerHTML = "";
   }
-  if (dataProduct.length != countCard) {
-    delBtn.innerHTML = `<button class="btn-danger" onclick="deleteAll()">Delete All (${countCard})</button>`;
+}
+
+function deleteData(id) {
+  dataProduct = dataProduct.filter(item => item.id !== id);
+  localStorage.product = JSON.stringify(dataProduct);
+  let searchVal = document.getElementById("search").value;
+  if(searchVal != "") {
+      searchData(searchVal);
+  } else {
+      showData();
   }
 }
 
-function deleteData(i) {
-  dataProduct.splice(i, 1);
-  localStorage.product = JSON.stringify(dataProduct);
-  showData();
-}
-
 function deleteAll() {
-  localStorage.clear();
-  dataProduct = [];
-  showData();
+    let searchInput = document.getElementById("search");
+
+    if (searchInput.value != "") {
+        dataProduct = dataProduct.filter(item => !filteredData.find(f => f.id === item.id));
+        searchInput.value = ""; 
+    } else {
+        dataProduct = [];
+    }
+    
+    localStorage.product = JSON.stringify(dataProduct);
+    showData();
 }
 
-function updateData(i) {
-  brand.value = dataProduct[i].brand;
-  model.value = dataProduct[i].model;
-  price.value = dataProduct[i].price;
-  tax.value = dataProduct[i].tax;
-  ads.value = dataProduct[i].ads;
-  discount.value = dataProduct[i].discount;
-  type.value = dataProduct[i].type;
+function updateData(id) {
+  let item = dataProduct.find(p => p.id === id);
+  brand.value = item.brand;
+  model.value = item.model;
+  price.value = item.price;
+  tax.value = item.tax;
+  ads.value = item.ads;
+  discount.value = item.discount;
+  type.value = item.type;
   getTotal();
   count.style.display = "none";
   submitBtn.innerHTML = "Update";
   mood = "update";
-  tmp = i;
+  tmp = id;
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function searchData(value) {
-  let filtered = dataProduct.filter(
+  filteredData = dataProduct.filter(
     (item) =>
       item.brand.toLowerCase().includes(value.toLowerCase()) ||
       item.model.toLowerCase().includes(value.toLowerCase()) ||
       item.type.toLowerCase().includes(value.toLowerCase()),
   );
-  showData(filtered);
+  showData(filteredData);
 }
 
 showData();
